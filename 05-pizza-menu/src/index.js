@@ -16,20 +16,20 @@ const style = {
 }
 
   return (
-    <header>
-      <h1 style={style} className="header">Fast React Pizza Co.</h1>
+    <header className="header">
+      <h1 style={style}>Fast React Pizza Co.</h1>
     </header>
   );
 }
 
 function Pizza({pizzaObj}){
   return (
-    <li className="pizza">
+    <li className={`pizza${pizzaObj.soldOut ? " sold-out" : ""}`}>
       <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
         <h3>{pizzaObj.name}</h3>
         <p>{pizzaObj.ingredients}</p>
-        <span>{pizzaObj.price}</span>
+        <span>{pizzaObj.soldOut ? "SOLD OUT" : pizzaObj.price}</span>
       </div>
     </li>
   );
@@ -44,28 +44,59 @@ function Pizza({pizzaObj}){
   }, */
 
 function Menu(){
+  const numPizzas = pizzaData.length;
+
   return (
     <main className="menu">
       <h2>Our menu</h2>
 
-      <ul className="pizzas">
-        {pizzaData.map(pizza => (
-          <Pizza pizzaObj={pizza} key={pizza.name}/>
-        ))}
-      </ul>
+      {numPizzas > 0 ? (
+          <>
+            <p>
+              Authentic Italian cuisine. {numPizzas} creative dishes to choose from.
+              All from our ston oven, all organic, all delicious.
+            </p>
+            <ul className="pizzas">
+              {pizzaData.map(pizza => (
+                <Pizza pizzaObj={pizza} key={pizza.name}/>
+              ))}
+            </ul>
+          </>
+        ):(
+          <p>We're still working on our menu. Please come back later :)</p>
+        )}
+
     </main>
   );
 }
 
+function Order({localDate, openHour, closeHour}){
+  return (
+    <div className="order">
+      <p>
+        {localDate}. We're open from {openHour}:00 until {closeHour}:00. Come to visit us or order online.
+      </p>
+      <button className="btn">Order</button>
+    </div>
+  )
+}
+
 function Footer (){
-  const hour = new Date().getHours(),
+  const dt = new Date(),
+    hour = dt.getHours(),
+    localDate = dt.toLocaleString(),
     openHour = 12,
-    closeHour = 22,
+    closeHour = 222,
     isOpen = hour >= openHour && hour < closeHour;
   
   return (
     <footer>
-      {new Date().toLocaleString()}. We're currently {isOpen ? "open":"closed"}.
+      {isOpen ? (
+        <Order openHour={openHour} closeHour={closeHour} localDate={localDate} />
+      ):(
+        <p>{localDate}. We're to welcome you between {openHour}:00 and {closeHour}:00.</p>
+      )}
+      
     </footer>
   );
 }
