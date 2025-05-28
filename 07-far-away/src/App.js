@@ -1,10 +1,14 @@
 import { useState } from "react";
 
-/* const initialItems = [
-  { id: 1, description: "Passports", quantity: 2, packed: false },
-  { id: 2, description: "Socks", quantity: 12, packed: true },
-  { id: 3, description: "Charger", quantity: 1, packed: false },
-]; */
+const initialItems = [
+  { id: 1, description: "Passports", quantity: 1, packed: false },
+  { id: 2, description: "EU card", quantity: 1, packed: false },
+  { id: 3, description: "T-shirts", quantity: 4, packed: false },
+  { id: 4, description: "Underpants", quantity: 8, packed: false },
+  { id: 5, description: "Socks", quantity: 8, packed: false },
+  { id: 6, description: "Photo machine", quantity: 1, packed: false },
+  { id: 7, description: "Charger", quantity: 1, packed: false },
+];
 
 function Logo(){
   return <h1>🏝️ Far away 📸</h1>
@@ -44,22 +48,22 @@ function Form({onAddItem}){
   );
 }
 
-function Item({item}){
+function Item({item, onDeleteItem}){
   return (
     <li>
       <span style={item.packed ? {textDecoration: "line-through"} : {}}>
         {item.quantity} {item.description}
       </span>
-      <button>❌</button>
+      <button onClick={()=> onDeleteItem(item.id)}>❌</button>
     </li>
   );
 }
 
-function PackingList({items}){
+function PackingList({items, onDeleteItem}){
   return (
     <div className="list">
       <ul>
-        {items.map(item=><Item item={item} key={item.id} />)}
+        {items.map(item=><Item item={item} key={item.id} onDeleteItem={onDeleteItem}/>)}
       </ul>
       <div>
 
@@ -80,17 +84,21 @@ function Stats(){
 }
 
 export default function App() {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(initialItems);
 
   function handleAddItem(item){
     setItems(items => [...items, item]);
+  }
+
+  function handleDeleteItem(id){
+    setItems(items => items.filter(i => i.id!== id));
   }
 
   return (
     <div className="app">
       <Logo />
       <Form onAddItem={handleAddItem}/>
-      <PackingList items={items}/>
+      <PackingList items={items} onDeleteItem={handleDeleteItem}/>
       <Stats />
     </div>
 
