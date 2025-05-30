@@ -1,9 +1,5 @@
-import { ListBox } from "./ListBox";
-import { WatchedBox } from "./WatchedBox";
-
-export function Main() {
+export function Main({children}) {
   return <main className="main">
-    <ListBox />
-    <WatchedBox />
+    {children}
   </main>;
 }

@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 function Logo() {
   return <div className="logo">
     <span role="img">🍿</span>
@@ -7,31 +5,9 @@ function Logo() {
   </div>;
 }
 
-function Search() {
-  const [query, setQuery] = useState("");
-
-  return <input
-    className="search"
-    type="text"
-    placeholder="Search movies..."
-    value={query}
-    onChange={(e) => setQuery(e.target.value)} />;
-}
-
-function NumResults(){
-  return (
-  <p className="num-results">
-    Found <strong>X</strong> results
-  </p>
-  )
-}
-
-export function NavBar() {
+export function NavBar({children}) {
   return <nav className="nav-bar">
     <Logo />
-    <Search />
-    <NumResults />
+    {children}
   </nav>;
-  // X = {movies.length}
 }
-
