@@ -1,4 +1,5 @@
 import { useState } from "react";
+//import PropTypes from "prop-types";
 
 const containerStyle ={
   display: "flex",
@@ -53,12 +54,22 @@ function Star({onClick, onHoverIn, onHoverOut, isFull, color, size}){
   )
 }
 
+/* StarRating.propTypes = {
+  maxRating: PropTypes.number.isRequired,
+  color: PropTypes.string,
+  size: PropTypes.number,
+  className: PropTypes.number,
+  messages: PropTypes.array,
+  defaultRating: PropTypes.number,
+  onSetRating: PropTypes.func,
+} */
+
 export function StarRating({
-    maxRating = 5,
+    maxRating = null, //5
     color = "#fcc419",
     size = 48,
     className = "",
-    messages = [],
+    messages,
     defaultRating = 0,
     onSetRating,
   })
@@ -80,6 +91,15 @@ export function StarRating({
     fontSize: `${size / 1.5}px`,
   }
 
+  if (messages){
+    if (maxRating !== null && maxRating !== messages.length)
+      throw new RangeError("The maxRating and the length of the messages are different");
+    maxRating = messages.length;
+  }
+  else {
+    if (!maxRating) maxRating = 5;
+  }
+
   return (
     <div style={containerStyle} className={className}>
       <div style={starContainerStyle}>
@@ -94,7 +114,7 @@ export function StarRating({
           />
         ))}
       </div>
-      <p style={textStyle}>{tempRate ? (messages.length === maxRating ? messages[tempRate-1] : tempRate) : ""}</p>
+      <p style={textStyle}>{tempRate ? (messages ? messages[tempRate-1] : tempRate) : ""}</p>
     </div>
   );
 }
